@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TimeSheetsWebApp.Models;
+using TimeSheetsWebApp.Repositories.Interfaces;
 
 namespace TimeSheetsWebApp.Controllers
 {
@@ -12,41 +14,39 @@ namespace TimeSheetsWebApp.Controllers
 
     public class ClientsController : ControllerBase
     {
-        List<string> data = new List<string>();
+        private readonly IClientRepo _repository;
+
+        public ClientsController (IClientRepo repository)
+        {
+            _repository = repository;
+        }
+
 
         [HttpGet("read")]
         public IActionResult GetListClients()
         {
-            foreach (string d in data)
-            {
-                Console.WriteLine(d);
-            }
+            _repository.GetList();
             return Ok();
         }
 
         [HttpPost("create")]
-        public IActionResult CreateClient([FromQuery] string input)
+        public IActionResult CreateClient([FromQuery] Client input)
         {
-            data.Add(input);
+            _repository.Create(input);
             return Ok();
         }
 
         [HttpPut("update")]
-        public IActionResult UpdateClient([FromQuery] string stringToUpdate, [FromQuery] string newString)
+        public IActionResult UpdateClient([FromQuery] Client client, [FromQuery] Client clientToUpdate)
         {
-            for (int i = 0; i < data.Count; i++)
-            {
-                if (data[i] == stringToUpdate)
-                    data[i] = newString;
-            }
-
+            _repository.Update(client, clientToUpdate);
             return Ok();
         }
 
         [HttpDelete("delete")]
-        public IActionResult DeleteClient([FromQuery] string stringToDelete)
+        public IActionResult DeleteClient([FromQuery] Client clientToDelete)
         {
-            data.Remove(stringToDelete);
+            _repository.Delete(clientToDelete);
             return Ok();
         }
 

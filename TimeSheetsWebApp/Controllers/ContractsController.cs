@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TimeSheetsWebApp.Models;
+using TimeSheetsWebApp.Repositories.Interfaces;
 
 namespace TimeSheetsWebApp.Controllers
 {
@@ -12,41 +14,39 @@ namespace TimeSheetsWebApp.Controllers
 
     public class ContractsController : ControllerBase
     {
-        List<string> data = new List<string>();
+        private readonly IContractRepo _repository;
+
+        public ContractsController(IContractRepo repository)
+        {
+            _repository = repository;
+        }
+
 
         [HttpGet("read")]
-        public IActionResult GetListCContracts()
+        public IActionResult GetListContracts()
         {
-            foreach (string d in data)
-            {
-                Console.WriteLine(d);
-            }
+            _repository.GetList();
             return Ok();
         }
 
         [HttpPost("create")]
-        public IActionResult CreateContract([FromQuery] string input)
+        public IActionResult CreateClient([FromQuery] Contract input)
         {
-            data.Add(input);
+            _repository.Create(input);
             return Ok();
         }
 
         [HttpPut("update")]
-        public IActionResult UpdateContract([FromQuery] string stringToUpdate, [FromQuery] string newString)
+        public IActionResult UpdateClient([FromQuery] Contract contract, [FromQuery] Contract contractToUpdate)
         {
-            for (int i = 0; i < data.Count; i++)
-            {
-                if (data[i] == stringToUpdate)
-                    data[i] = newString;
-            }
-
+            _repository.Update(contract, contractToUpdate);
             return Ok();
         }
 
         [HttpDelete("delete")]
-        public IActionResult DeleteContract([FromQuery] string stringToDelete)
+        public IActionResult DeleteClient([FromQuery] Contract contractToDelete)
         {
-            data.Remove(stringToDelete);
+            _repository.Delete(contractToDelete);
             return Ok();
         }
 

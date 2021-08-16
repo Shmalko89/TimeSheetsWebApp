@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TimeSheetsWebApp.Models;
+using TimeSheetsWebApp.Repositories.Interfaces;
 
 namespace TimeSheetsWebApp.Controllers
 {
@@ -12,41 +14,39 @@ namespace TimeSheetsWebApp.Controllers
 
     public class InvoicesController : ControllerBase
     {
-        List<string> data = new List<string>();
+        private readonly IInvoiceRepo _repository;
+
+        public InvoicesController(IInvoiceRepo repository)
+        {
+            _repository = repository;
+        }
+
 
         [HttpGet("read")]
         public IActionResult GetListInvoices()
         {
-            foreach (string d in data)
-            {
-                Console.WriteLine(d);
-            }
+            _repository.GetList();
             return Ok();
         }
 
         [HttpPost("create")]
-        public IActionResult CreateInvoice([FromQuery] string input)
+        public IActionResult CreateInvoice([FromQuery] Invoices input)
         {
-            data.Add(input);
+            _repository.Create(input);
             return Ok();
         }
 
         [HttpPut("update")]
-        public IActionResult UpdateInvoice([FromQuery] string stringToUpdate, [FromQuery] string newString)
+        public IActionResult UpdateClient([FromQuery] Invoices invoice, [FromQuery] Invoices invoiceToUpdate)
         {
-            for (int i = 0; i < data.Count; i++)
-            {
-                if (data[i] == stringToUpdate)
-                    data[i] = newString;
-            }
-
+            _repository.Update(invoice, invoiceToUpdate);
             return Ok();
         }
 
         [HttpDelete("delete")]
-        public IActionResult DeleteInvoice([FromQuery] string stringToDelete)
+        public IActionResult DeleteClient([FromQuery] Invoices invoicesToDelete)
         {
-            data.Remove(stringToDelete);
+            _repository.Delete(invoicesToDelete);
             return Ok();
         }
 
