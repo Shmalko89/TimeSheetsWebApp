@@ -1,5 +1,7 @@
+using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using TimeSheetsWebApp.Models.EntityFramework;
 
 namespace TimeSheetsWebApp.Repositories
 {
@@ -10,4 +12,5 @@ namespace TimeSheetsWebApp.Repositories
         void Update(T item, T itemToUpdate);
         void Delete(T item);
     }
+
 }
