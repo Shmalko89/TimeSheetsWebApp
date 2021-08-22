@@ -7,5 +7,6 @@ namespace TimeSheetsWebApp.Models
     {
         public int Id { get; set; }
         public string EmployeeName { get; set; }
+
     }
 }
